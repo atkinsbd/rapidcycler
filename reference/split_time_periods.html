@@ -52,7 +52,7 @@
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">split_time_periods</span><span class="op">(</span><span class="va">start</span>, <span class="va">end</span>, <span class="va">period_length</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">split_time_periods</span><span class="op">(</span><span class="va">start</span>, <span class="va">end</span>, <span class="va">period_length</span>, align_periods <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -67,6 +67,11 @@
 
 <dt>period_length</dt>
 <dd><p>Character representing desired length of sub-periods, e.g. 'month', 'day'</p></dd>
+
+
+<dt>align_periods</dt>
+<dd><p>Boolean whether or not to adjust time periods so that they will align,
+even if start dates differ. Currently only set up to handle monthly periods, but may be generalised in the future.</p></dd>
 
 </dl></div>
     <div class="section level2">

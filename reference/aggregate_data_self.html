@@ -71,6 +71,14 @@
 <dd><p>Patient data input data.table</p></dd>
 
 
+<dt>vaccination_data</dt>
+<dd><p>Vaccination data input data.table. Set to NULL to perform historical data aggregation</p></dd>
+
+
+<dt>outcome_data</dt>
+<dd><p>AESI outcome data input data.table</p></dd>
+
+
 <dt>period_start</dt>
 <dd><p>Start date of period, as a date object. Period lengths are defined in the options file, with each cycle possibly containing multiple periods. Only a single period is aggregated at a time.</p></dd>
 
@@ -80,7 +88,7 @@
 
 
 <dt>options</dt>
-<dd><p>Options object, already converted from txt file.</p></dd>
+<dd><p>Options object, already converted from txt file. Supply either options_file_location or options, not both</p></dd>
 
 
 <dt>comparator</dt>

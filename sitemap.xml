@@ -88,7 +88,16 @@
     <loc>https://global-vaccine-data-network.github.io/rapidcycler/reference/find_first_vac.html</loc>
   </url>
   <url>
+    <loc>https://global-vaccine-data-network.github.io/rapidcycler/reference/generate_outcome_data.html</loc>
+  </url>
+  <url>
+    <loc>https://global-vaccine-data-network.github.io/rapidcycler/reference/generate_patient_data.html</loc>
+  </url>
+  <url>
     <loc>https://global-vaccine-data-network.github.io/rapidcycler/reference/generate_synthetic_data.html</loc>
+  </url>
+  <url>
+    <loc>https://global-vaccine-data-network.github.io/rapidcycler/reference/generate_vaccination_data.html</loc>
   </url>
   <url>
     <loc>https://global-vaccine-data-network.github.io/rapidcycler/reference/index.html</loc>

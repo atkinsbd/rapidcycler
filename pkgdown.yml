@@ -7,7 +7,7 @@ articles:
   generate: generate.html
   validate: validate.html
   visualise: visualise.html
-last_built: 2024-10-11T00:53Z
+last_built: 2024-10-13T23:00Z
 urls:
   reference: https://global-vaccine-data-network.github.io/rapidcycler/reference
   article: https://global-vaccine-data-network.github.io/rapidcycler/articles
