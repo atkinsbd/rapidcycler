@@ -41,11 +41,8 @@
 <li class="nav-item dropdown">
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
-    <a class="dropdown-item" href="articles/analyse.html">analyse</a>
-    <a class="dropdown-item" href="articles/configure.html">configure</a>
-    <a class="dropdown-item" href="articles/generate.html">generate</a>
+    <a class="dropdown-item" href="articles/aggregate.html">aggregate</a>
     <a class="dropdown-item" href="articles/validate.html">validate</a>
-    <a class="dropdown-item" href="articles/visualise.html">visualise</a>
   </div>
 </li>
       </ul>
@@ -69,7 +66,7 @@
 <p><strong>The protocol, data dictionary, table templates, and other information that suppport the use of this package can be found on the GVDN extranet: <a href="https://uoa.sharepoint.com/:f:/r/sites/globalvaccinedatanetwork/Shared%20Documents/GCoVS%20Project/2.%20Rapid%20Cycle%20Analyses/RCA%20II%20(2024)?csf=1&amp;web=1&amp;e=eV1u5Y" class="external-link">RCA II (2024)</a></strong></p>
 <p>The goal of <em>rapidcycler</em> is to bring together a number of methodologies and functions that are used to perform Rapid Cycle Analysis (RCA).</p>
 <p>The current version of the package includes functionality to validate and aggregate line list data into a de-identified format for sharing with GVDN. There is also additional functionality to produce synthetic line list data, though this has not been thoroughly tested and as such should only be used for illustrative/testing purposes.</p>
-<p>Future versions will include functions to perform sequential analysis using maximised sequential probability ratio tests (MaxSPRT), visualise results, and produce reports. A Shiny app is also planned to aid in the regular communication of results. Sites are not required to use these functions, as the analysis and dissemination of results will be performed by GVDN, however they are provided for transparency and so that sites may</p>
+<p>Future versions will include functions to perform sequential analysis using maximised sequential probability ratio tests (MaxSPRT), visualise results, and produce reports. A Shiny app is also planned to aid in the regular communication of results. Sites are not required to use these functions, as the analysis and dissemination of results will be performed by GVDN, however they are provided for transparency and so that sites may utilise them as they please.</p>
 <div class="section level2">
 <h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
 </h2>
@@ -77,7 +74,7 @@
 <div class="section level3">
 <h3 id="id_1-tarball-installation">1. Tarball installation<a class="anchor" aria-label="anchor" href="#id_1-tarball-installation"></a>
 </h3>
-<p>If you are unable to connect to GitHub from within your working environment, this is the method you will use. A single zipped file (tarball) will be made available for you to download and import into your environment. This will contain the source code for the package, and can be opened and checked, however should not be edited. Once saved in your environment, the package can be installed with the following command:</p>
+<p>If you are unable to connect to GitHub from within your working environment, this is the method you will use. A single zipped file (tarball) will be made available for you to download (<a href="https://uoa.sharepoint.com/:f:/r/sites/globalvaccinedatanetwork/Shared%20Documents/GCoVS%20Project/2.%20Rapid%20Cycle%20Analyses/RCA%20II%20(2024)/rapidcycler?csf=1&amp;web=1&amp;e=BpUkks" class="external-link">here</a>) and import into your environment. This will contain the source code for the package, and can be opened and checked, however should not be edited. Once saved in your environment, the package can be installed with the following command:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># EDIT THE FILE PATH AND NAME AS NECESSARY</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"~/Documents/rapidcycler_1.0.0.0.tar.gz"</span>, repos <span class="op">=</span> <span class="cn">NULL</span>, type<span class="op">=</span><span class="st">"source"</span><span class="op">)</span></span></code></pre></div>
@@ -104,6 +101,16 @@
 <li>stringr</li>
 </ul>
 </div>
+<div class="section level3">
+<h3 id="loading-and-using">Loading and using<a class="anchor" aria-label="anchor" href="#loading-and-using"></a>
+</h3>
+<p>Once the package has been installed, it can be loaded and used in the same way as any R package. There are two main ways to do this:</p>
+<ol style="list-style-type: decimal">
+<li><p>Load the whole package and its functions using <code><a href="https://atkinsbd.github.io/rapidcycler" class="external-link">library(rapidcycler)</a></code>. You can then call functions by name, e.g. <code><a href="reference/aggregate_data.html">aggregate_data()</a></code>.</p></li>
+<li><p>Use specific functions only with the <code>::</code> notation, e.g. <code><a href="reference/aggregate_data.html">rapidcycler::aggregate_data()</a></code>.</p></li>
+</ol>
+<p>The functions you can access using the above methods are called exported functions, and are the primary functions that you should interact with. However, there are also many non-exported, internal functions, which do a lot of work behind the scenes. These functions are also documented (see the ‘Reference’ tab on the website, or help page in RStudio), and can be accessed using the <code>:::</code> notation. For example, <code>rapidcycler:::convert_date_to_number(date)</code>, will convert a Date object to an 8-digit integer representation of that date. It is not necessary to explore or explicitly use these functions, but they are there if you wish to.</p>
+</div>
 </div>
 <div class="section level2">
 <h2 id="package-structure">Package structure<a class="anchor" aria-label="anchor" href="#package-structure"></a>
@@ -122,127 +129,13 @@
 <h2 id="basic-usage">Basic usage<a class="anchor" aria-label="anchor" href="#basic-usage"></a>
 </h2>
 <p>To participate in RCA, <strong>sites are only required to interact with the aggregation part of the package</strong>. The other functionalities will be used by GVDN to perform the analyses and report results, however will be provided to sites to make use of if they wish to (expected in future version).</p>
-<p>The primary function for aggregation is <code><a href="reference/aggregate_data.html">aggregate_data()</a></code>. You can view the full documentation using <code><a href="reference/aggregate_data.html">?aggregate_data</a></code> or <code><a href="reference/aggregate_data.html">help("aggregate_data")</a></code>. A few key things to note:</p>
-<ul>
-<li><p>Requires input data in the format described in the data dictionary and output templates, also summarised in a later section.</p></li>
-<li><p>If the <code>vaccination_data</code> input is set to <code>NULL</code>, the function will perform historical data aggregation.</p></li>
-<li><p>The input datasets are saved and removed from the global environment during aggregation, but restored afterwards by default (see <code>restore_input_data</code> parameter). They can also be restored manually using the <code><a href="reference/recombine_input_data.html">recombine_input_data()</a></code> function. Once aggregation is complete, the saved versions of the input datasets are deleted. If you would like to store the input datasets that were used, please do so manually whilst they are still in your global environment.</p></li>
-<li><p>Validation of the input datasets is run automatically before aggregation is started. If any issues are found, aggregation will be aborted and the issues printed in the console. These issues will need to be fixed before aggregation can be completed. Validation can also be run separately - see Advanced usage section at the end of this document.</p></li>
-<li><p>There is no output from the function, however it will create a new folder with the name format “RCA_[STUDY_CODENAME]_[SITE_CODE]_[CYCLE_START]-[CYCLE_END]”, at the location specified by <code>working_directory</code>, and save the aggregated tables within it. Once complete, this folder should be zipped and sent to GVDN.</p></li>
-<li><p>Requires an ‘options.txt’ file to run - this can be found on the extranet (<a href="https://uoa.sharepoint.com/:f:/r/sites/globalvaccinedatanetwork/Shared%20Documents/GCoVS%20Project/2.%20Rapid%20Cycle%20Analyses/RCA%20II%20(2024)?csf=1&amp;web=1&amp;e=eV1u5Y" class="external-link">RCA II (2024)</a>) and should be downloaded and saved in an appropriate location (specified by <code>options_file_location</code>). This same file should be used for the duration of the study (one options file per study module).</p></li>
-</ul>
-<div class="section level3">
-<h3 id="example-default-usage">Example: Default usage<a class="anchor" aria-label="anchor" href="#example-default-usage"></a>
-</h3>
-<p>There are 7 required inputs for the function, and several optional inputs that will revert to a default if not specified.</p>
-<p>The code below will create a new folder in your current working directory, given by <code><a href="https://rdrr.io/r/base/getwd.html" class="external-link">getwd()</a></code>. There must also be an ‘options.txt’ file saved in this location.</p>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># Assuming patient_data, vaccination_data, and outcome_data are data.table objects already loaded into the global environment</span></span>
-<span><span class="fu"><a href="reference/aggregate_data.html">aggregate_data</a></span><span class="op">(</span><span class="va">patient_data</span>, <span class="va">vaccination_data</span>, <span class="va">outcome_data</span>,</span>
-<span>               cycle_start_date <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/as.Date.html" class="external-link">as.Date</a></span><span class="op">(</span><span class="st">"2022-01-01"</span><span class="op">)</span>,</span>
-<span>               cycle_end_date <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/as.Date.html" class="external-link">as.Date</a></span><span class="op">(</span><span class="st">"2022-01-31"</span><span class="op">)</span>,</span>
-<span>               site_code <span class="op">=</span> <span class="st">"TEST_SITE"</span>,</span>
-<span>               participation_level <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span></code></pre></div>
+<p>For an in depth explanation of the aggregation functions and examples, refer to the aggregate vignette: this can be found under the ‘Articles’ tab of the website, or by running <code><a href="articles/aggregate.html">vignette("aggregate", "rapidcycler")</a></code> in RStudio (once package has been installed).</p>
 </div>
-<div class="section level3">
-<h3 id="example-using-different-locations">Example: Using different locations<a class="anchor" aria-label="anchor" href="#example-using-different-locations"></a>
-</h3>
-<p>There are two important file locations within the function:</p>
-<ul>
-<li><p><code>options_file_location</code>: this is where the ‘options.txt’ file is stored (in local memory)</p></li>
-<li><p><code>working_directory</code>: this is where a new folder will be created, within which aggregated tables are saved</p></li>
-</ul>
-<p>Both these inputs will default to the current working directory, given by <code><a href="https://rdrr.io/r/base/getwd.html" class="external-link">getwd()</a></code>, if not specified. To use a different location, you can either change your current working directory using <code><a href="https://rdrr.io/r/base/getwd.html" class="external-link">setwd()</a></code> (both locations will be the same), or use these inputs to specify different locations (they do not need to match, but in our recommended folder structure they do).</p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># Assuming patient_data, vaccination_data, and outcome_data are data.table objects already loaded into the global environment</span></span>
-<span><span class="fu"><a href="reference/aggregate_data.html">aggregate_data</a></span><span class="op">(</span><span class="va">patient_data</span>, <span class="va">vaccination_data</span>, <span class="va">outcome_data</span>,</span>
-<span>               cycle_start_date <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/as.Date.html" class="external-link">as.Date</a></span><span class="op">(</span><span class="st">"2022-01-01"</span><span class="op">)</span>,</span>
-<span>               cycle_end_date <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/as.Date.html" class="external-link">as.Date</a></span><span class="op">(</span><span class="st">"2022-01-31"</span><span class="op">)</span>,</span>
-<span>               site_code <span class="op">=</span> <span class="st">"TEST_SITE"</span>,</span>
-<span>               participation_level <span class="op">=</span> <span class="fl">3</span>,</span>
-<span>               options_file_location <span class="op">=</span> <span class="st">"~/Documents/RCA_COVID/"</span>,</span>
-<span>               working_directory <span class="op">=</span> <span class="st">"~/Documents/RCA_COVID/"</span><span class="op">)</span></span></code></pre></div>
-</div>
-<div class="section level3">
-<h3 id="example-memory-considerations">Example: Memory considerations<a class="anchor" aria-label="anchor" href="#example-memory-considerations"></a>
-</h3>
-<div class="section level4">
-<h4 id="insufficient-ram">Insufficient RAM<a class="anchor" aria-label="anchor" href="#insufficient-ram"></a>
-</h4>
-<p>If you find that you are running out of RAM during execution of the <code><a href="reference/aggregate_data.html">aggregate_data()</a></code> function, or execution is very slow, you can restrict the amount of data that is aggregated at one time using the <code>split_size</code> input. The function splits the input data into portions of size <code>split_size</code> according to <code>PID</code>, stores the split datasets in a subfolder called ‘data’, aggregates one split at a time, and then recombines and performs the final aggregation once all splits are complete. The default is 500,000, and should be lowered if memory is an issue. If you have large amounts of RAM, increasing the split size may also speed up aggregation. <strong>NOTE: you should still input the whole datasets - the function will handle the splitting itself</strong>.</p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># Assuming patient_data, vaccination_data, and outcome_data are data.table objects already loaded into the global environment</span></span>
-<span><span class="fu"><a href="reference/aggregate_data.html">aggregate_data</a></span><span class="op">(</span><span class="va">patient_data</span>, <span class="va">vaccination_data</span>, <span class="va">outcome_data</span>,</span>
-<span>               cycle_start_date <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/as.Date.html" class="external-link">as.Date</a></span><span class="op">(</span><span class="st">"2022-01-01"</span><span class="op">)</span>,</span>
-<span>               cycle_end_date <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/as.Date.html" class="external-link">as.Date</a></span><span class="op">(</span><span class="st">"2022-01-31"</span><span class="op">)</span>,</span>
-<span>               site_code <span class="op">=</span> <span class="st">"TEST_SITE"</span>,</span>
-<span>               participation_level <span class="op">=</span> <span class="fl">3</span>, </span>
-<span>               split_size <span class="op">=</span> <span class="fl">100000</span><span class="op">)</span></span></code></pre></div>
-</div>
-<div class="section level4">
-<h4 id="input-datasets-too-large">Input datasets too large<a class="anchor" aria-label="anchor" href="#input-datasets-too-large"></a>
-</h4>
-<p><strong>NOTE: only use this method if your input datasets are so large that it is not possible to load them into R in one go</strong>. If so, you can divide the data into chunks before aggregating. If you do so, you must specify <code>input_data_in_chunks = TRUE</code>. The data should be divided into chunks by <code>PID</code>, so that all the records associated with a person are included in the same chunk. The temporary results from each chunk will be stored until the last chunk is aggregated (specified using <code>final_chunk = TRUE</code>), after which the temporary results will be combined and the final aggregation performed.</p>
-<p>In this case, you will need to call the <code><a href="reference/aggregate_data.html">aggregate_data()</a></code> function multiple times. Each time, you should pass only a single chunk of each dataset, therefore, requires loading a new chunk of input data (either from a saved file or directly from the database) before each function call.</p>
-<p>The example below assumes that the input datasets are split into 2 chunks, and there exists code to retrieve these chunks from a saved file or directly from the database.</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">patient_data_chunk1</span> <span class="op">&lt;-</span> <span class="fu">load_patient_data_chunk1</span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="va">vaccination_data_chunk1</span> <span class="op">&lt;-</span> <span class="va">load_vaccination_data_chunk1</span></span>
-<span><span class="va">outcome_data_chunk1</span> <span class="op">&lt;-</span> <span class="va">load_outcome_data_chunk1</span></span>
-<span></span>
-<span><span class="fu"><a href="reference/aggregate_data.html">aggregate_data</a></span><span class="op">(</span><span class="va">patient_data_chunk1</span>, <span class="va">vaccination_data_chunk1</span>, <span class="va">outcome_data_chunk1</span>,</span>
-<span>               cycle_start_date <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/as.Date.html" class="external-link">as.Date</a></span><span class="op">(</span><span class="st">"2022-01-01"</span><span class="op">)</span>,</span>
-<span>               cycle_end_date <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/as.Date.html" class="external-link">as.Date</a></span><span class="op">(</span><span class="st">"2022-01-31"</span><span class="op">)</span>,</span>
-<span>               site_code <span class="op">=</span> <span class="st">"TEST_SITE"</span>,</span>
-<span>               participation_level <span class="op">=</span> <span class="fl">3</span>, </span>
-<span>               input_data_in_chunks <span class="op">=</span> <span class="cn">TRUE</span>,</span>
-<span>               final_chunk <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span> <span class="co"># FALSE until final chunk</span></span>
-<span></span>
-<span><span class="co"># Remove data from memory (can also do this automatically by setting 'restore_input_data = FALSE' in function call)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/rm.html" class="external-link">rm</a></span><span class="op">(</span><span class="st">"patient_data_chunk1"</span>, <span class="st">"vaccination_data_chunk1"</span>, <span class="st">"outcome_data_chunk1"</span><span class="op">)</span></span>
-<span></span>
-<span><span class="va">patient_data_chunk2</span> <span class="op">&lt;-</span> <span class="fu">load_patient_data_chunk2</span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="va">vaccination_data_chunk2</span> <span class="op">&lt;-</span> <span class="va">load_vaccination_data_chunk2</span></span>
-<span><span class="va">outcome_data_chunk2</span> <span class="op">&lt;-</span> <span class="va">load_outcome_data_chunk2</span></span>
-<span></span>
-<span><span class="fu"><a href="reference/aggregate_data.html">aggregate_data</a></span><span class="op">(</span><span class="va">patient_data_chunk2</span>, <span class="va">vaccination_data_chunk2</span>, <span class="va">outcome_data_chunk2</span>,</span>
-<span>               cycle_start_date <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/as.Date.html" class="external-link">as.Date</a></span><span class="op">(</span><span class="st">"2022-01-01"</span><span class="op">)</span>,</span>
-<span>               cycle_end_date <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/as.Date.html" class="external-link">as.Date</a></span><span class="op">(</span><span class="st">"2022-01-31"</span><span class="op">)</span>,</span>
-<span>               site_code <span class="op">=</span> <span class="st">"TEST_SITE"</span>,</span>
-<span>               participation_level <span class="op">=</span> <span class="fl">3</span>, </span>
-<span>               input_data_in_chunks <span class="op">=</span> <span class="cn">TRUE</span>,</span>
-<span>               final_chunk <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="co"># TRUE to trigger final aggregation</span></span>
-<span></span>
-<span><span class="co"># Remove data from memory (can also do this automatically by setting 'restore_input_data = FALSE' in function call)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/rm.html" class="external-link">rm</a></span><span class="op">(</span><span class="st">"patient_data_chunk2"</span>, <span class="st">"vaccination_data_chunk2"</span>, <span class="st">"outcome_data_chunk2"</span><span class="op">)</span></span></code></pre></div>
-<p><strong>IMPORTANT - do not combine fully aggregated tables together, as this will not produce correctly aggregated tables. Dealing with the input data in chunks must be performed in the way described above</strong></p>
-</div>
-</div>
-<div class="section level3">
-<h3 id="example-stopping-and-restarting-aggregation">Example: Stopping and restarting aggregation<a class="anchor" aria-label="anchor" href="#example-stopping-and-restarting-aggregation"></a>
-</h3>
-<p>It is possible to stop the aggregation and restart at a later time. You can stop aggregation by manually interrupting execution, or by using the <code>stop_after_n_splits</code> input. Either way, aggregation can be resumed from where it was stopped. Note that, if you stop aggregation by manually interrupting execution, the input datasets will not be restored to the global environment afterwards. However, they are saved in the ‘data’ subfolder (in split format) ready for resumption, and can be restored to the global environment using the <code><a href="reference/recombine_input_data.html">recombine_input_data()</a></code> function.</p>
-<p>The example below will stop aggregation after 2 splits of the input datasets have been aggregated (note, this will aggregate those splits across all time periods and study designs).</p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># Assuming patient_data, vaccination_data, and outcome_data are data.table objects already loaded into the global environment</span></span>
-<span><span class="fu"><a href="reference/aggregate_data.html">aggregate_data</a></span><span class="op">(</span><span class="va">patient_data</span>, <span class="va">vaccination_data</span>, <span class="va">outcome_data</span>,</span>
-<span>               cycle_start_date <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/as.Date.html" class="external-link">as.Date</a></span><span class="op">(</span><span class="st">"2022-01-01"</span><span class="op">)</span>,</span>
-<span>               cycle_end_date <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/as.Date.html" class="external-link">as.Date</a></span><span class="op">(</span><span class="st">"2022-01-31"</span><span class="op">)</span>,</span>
-<span>               site_code <span class="op">=</span> <span class="st">"TEST_SITE"</span>,</span>
-<span>               participation_level <span class="op">=</span> <span class="fl">3</span>, </span>
-<span>               stop_after_n_splits <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></code></pre></div>
-<p>The simplest way to resume aggregation is by using the <code><a href="reference/resume_cycle_aggregation.html">resume_cycle_aggregation()</a></code> function:</p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="reference/resume_cycle_aggregation.html">resume_cycle_aggregation</a></span><span class="op">(</span>folder_name <span class="op">=</span> <span class="st">"RCA_COVID_TEST_SITE_20220101-20220131"</span>, </span>
-<span>                         working_directory <span class="op">=</span> <span class="st">"~/Documents/RCA_COVID/"</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># NOTE: also optional arguments stop_after_n_splits, input_data_in_chunks, and final_chunk, that behave in the same way as previously described</span></span></code></pre></div>
-</div>
-<div class="section level3">
-<h3 id="input-datasets">Input datasets<a class="anchor" aria-label="anchor" href="#input-datasets"></a>
-</h3>
-<p>A full data dictionary can be found here: <a href="https://uoa.sharepoint.com/:f:/r/sites/globalvaccinedatanetwork/Shared%20Documents/GCoVS%20Project/2.%20Rapid%20Cycle%20Analyses/RCA%20II%20(2024)?csf=1&amp;web=1&amp;e=eV1u5Y" class="external-link">RCA II (2024)</a></p>
-<p>The input datasets should have the following structures:</p>
+<div class="section level2">
+<h2 id="input-datasets">Input datasets<a class="anchor" aria-label="anchor" href="#input-datasets"></a>
+</h2>
+<p>The starting point for interacting with the package is to obtain 3 data.table objects, containing information on patients, vaccinations, and AESI outcomes.</p>
+<p>A full data dictionary can be found here: <a href="https://uoa.sharepoint.com/:f:/r/sites/globalvaccinedatanetwork/Shared%20Documents/GCoVS%20Project/2.%20Rapid%20Cycle%20Analyses/RCA%20II%20(2024)?csf=1&amp;web=1&amp;e=eV1u5Y" class="external-link">RCA II (2024)</a>, and a summary of the input dataset structures is given below:</p>
 <p><strong><em>patient_data</em></strong></p>
 <table class="table">
 <colgroup>
@@ -354,44 +247,43 @@
 </tbody>
 </table>
 </div>
-<div class="section level3">
-<h3 id="recommended-folder-structure">Recommended folder structure<a class="anchor" aria-label="anchor" href="#recommended-folder-structure"></a>
-</h3>
-<p>There is no restriction on the folder structure you use within your local environment. However, in case it is useful, we provide the the outline of a structure that we recommend below. Folder names can be changed as you please, but note that the name of the folder created by the <code><a href="reference/aggregate_data.html">aggregate_data()</a></code> function should not be changed.</p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" tabindex="-1"></a>GVDN</span>
-<span id="cb9-2"><a href="#cb9-2" tabindex="-1"></a>│</span>
-<span id="cb9-3"><a href="#cb9-3" tabindex="-1"></a>└───RCA2</span>
-<span id="cb9-4"><a href="#cb9-4" tabindex="-1"></a>    │</span>
-<span id="cb9-5"><a href="#cb9-5" tabindex="-1"></a>    └───COVID   <span class="ot">&lt;-</span><span class="sc">------</span> working directory</span>
-<span id="cb9-6"><a href="#cb9-6" tabindex="-1"></a>    <span class="sc">|</span>   │   options.txt</span>
-<span id="cb9-7"><a href="#cb9-7" tabindex="-1"></a>    <span class="sc">|</span>   <span class="er">|</span>   </span>
-<span id="cb9-8"><a href="#cb9-8" tabindex="-1"></a>    <span class="er">|</span>   └───RCA_COVID_TEST_SITE_20250101<span class="dv">-20250131</span>   <span class="ot">&lt;-</span><span class="sc">------</span> zip and send to GVDN</span>
-<span id="cb9-9"><a href="#cb9-9" tabindex="-1"></a>    <span class="sc">|</span>   <span class="er">|</span>   │   data_self_pre.csv</span>
-<span id="cb9-10"><a href="#cb9-10" tabindex="-1"></a>    <span class="sc">|</span>   <span class="er">|</span>   │   data_self_post.csv</span>
-<span id="cb9-11"><a href="#cb9-11" tabindex="-1"></a>    <span class="sc">|</span>   <span class="er">|</span>   │   data_exposed_person_days.csv</span>
-<span id="cb9-12"><a href="#cb9-12" tabindex="-1"></a>    <span class="sc">|</span>   <span class="er">|</span>   │   data_exposed_cases.csv</span>
-<span id="cb9-13"><a href="#cb9-13" tabindex="-1"></a>    <span class="sc">|</span>   <span class="er">|</span>   │   data_descriptive_vaccination.csv</span>
-<span id="cb9-14"><a href="#cb9-14" tabindex="-1"></a>    <span class="sc">|</span>   <span class="er">|</span>   │   data_descriptive_outcomes.csv</span>
-<span id="cb9-15"><a href="#cb9-15" tabindex="-1"></a>    <span class="sc">|</span>   <span class="er">|</span>   │   data_concurrent_vac.csv</span>
-<span id="cb9-16"><a href="#cb9-16" tabindex="-1"></a>    <span class="sc">|</span>   <span class="er">|</span>   │   data_concurrent_unvac.csv</span>
-<span id="cb9-17"><a href="#cb9-17" tabindex="-1"></a>    <span class="sc">|</span>   <span class="er">|</span>   │   notes.txt</span>
-<span id="cb9-18"><a href="#cb9-18" tabindex="-1"></a>    <span class="sc">|</span>   <span class="er">|</span>   </span>
-<span id="cb9-19"><a href="#cb9-19" tabindex="-1"></a>    <span class="er">|</span>   └───RCA_COVID_TEST_SITE_20250201<span class="dv">-20250228</span>   <span class="ot">&lt;-</span><span class="sc">------</span> zip and send to GVDN</span>
-<span id="cb9-20"><a href="#cb9-20" tabindex="-1"></a>    <span class="sc">|</span>   <span class="er">|</span>   │   data_self_pre.csv</span>
-<span id="cb9-21"><a href="#cb9-21" tabindex="-1"></a>    <span class="sc">|</span>   <span class="er">|</span>   │...</span>
-<span id="cb9-22"><a href="#cb9-22" tabindex="-1"></a>    <span class="sc">|</span>   <span class="er">|</span>   </span>
-<span id="cb9-23"><a href="#cb9-23" tabindex="-1"></a>    <span class="er">|</span>   <span class="er">|</span>...</span>
-<span id="cb9-24"><a href="#cb9-24" tabindex="-1"></a>    <span class="sc">|</span></span>
-<span id="cb9-25"><a href="#cb9-25" tabindex="-1"></a>    (<span class="cf">in</span> the future...)</span>
-<span id="cb9-26"><a href="#cb9-26" tabindex="-1"></a>    <span class="sc">|</span></span>
-<span id="cb9-27"><a href="#cb9-27" tabindex="-1"></a>    └───<span class="fu">RSV</span> (or other future module)</span>
-<span id="cb9-28"><a href="#cb9-28" tabindex="-1"></a>        │   options.txt</span>
-<span id="cb9-29"><a href="#cb9-29" tabindex="-1"></a>        <span class="sc">|</span>   </span>
-<span id="cb9-30"><a href="#cb9-30" tabindex="-1"></a>        └───RCA_RSV_TEST_SITE_20260101<span class="dv">-20260131</span></span>
-<span id="cb9-31"><a href="#cb9-31" tabindex="-1"></a>        <span class="sc">|</span>   │   data_self_pre.csv</span>
-<span id="cb9-32"><a href="#cb9-32" tabindex="-1"></a>        <span class="sc">|</span>   <span class="er">|</span>...</span>
-<span id="cb9-33"><a href="#cb9-33" tabindex="-1"></a>        <span class="sc">|</span>...</span></code></pre></div>
-</div>
+<div class="section level2">
+<h2 id="recommended-folder-structure">Recommended folder structure<a class="anchor" aria-label="anchor" href="#recommended-folder-structure"></a>
+</h2>
+<p>There is no restriction on the folder structure you use within your local environment. However, in case it is useful, we provide the the outline of a structure that we recommend below. Folder names can be changed as you please, but note that the name of the folder created by the <code><a href="reference/aggregate_data.html">aggregate_data()</a></code> function should not be changed (details in the aggregate vignette).</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a>GVDN</span>
+<span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a>│</span>
+<span id="cb3-3"><a href="#cb3-3" tabindex="-1"></a>└───RCA2</span>
+<span id="cb3-4"><a href="#cb3-4" tabindex="-1"></a>    │</span>
+<span id="cb3-5"><a href="#cb3-5" tabindex="-1"></a>    └───COVID   <span class="ot">&lt;-</span><span class="sc">------</span> working directory</span>
+<span id="cb3-6"><a href="#cb3-6" tabindex="-1"></a>    <span class="sc">|</span>   │   options.txt</span>
+<span id="cb3-7"><a href="#cb3-7" tabindex="-1"></a>    <span class="sc">|</span>   <span class="er">|</span>   </span>
+<span id="cb3-8"><a href="#cb3-8" tabindex="-1"></a>    <span class="er">|</span>   └───RCA_COVID_TEST_SITE_20250101<span class="dv">-20250131</span>   <span class="ot">&lt;-</span><span class="sc">------</span> zip and send to GVDN</span>
+<span id="cb3-9"><a href="#cb3-9" tabindex="-1"></a>    <span class="sc">|</span>   <span class="er">|</span>   │   data_self_pre.csv</span>
+<span id="cb3-10"><a href="#cb3-10" tabindex="-1"></a>    <span class="sc">|</span>   <span class="er">|</span>   │   data_self_post.csv</span>
+<span id="cb3-11"><a href="#cb3-11" tabindex="-1"></a>    <span class="sc">|</span>   <span class="er">|</span>   │   data_exposed_person_days.csv</span>
+<span id="cb3-12"><a href="#cb3-12" tabindex="-1"></a>    <span class="sc">|</span>   <span class="er">|</span>   │   data_exposed_cases.csv</span>
+<span id="cb3-13"><a href="#cb3-13" tabindex="-1"></a>    <span class="sc">|</span>   <span class="er">|</span>   │   data_descriptive_vaccination.csv</span>
+<span id="cb3-14"><a href="#cb3-14" tabindex="-1"></a>    <span class="sc">|</span>   <span class="er">|</span>   │   data_descriptive_outcomes.csv</span>
+<span id="cb3-15"><a href="#cb3-15" tabindex="-1"></a>    <span class="sc">|</span>   <span class="er">|</span>   │   data_concurrent_vac.csv</span>
+<span id="cb3-16"><a href="#cb3-16" tabindex="-1"></a>    <span class="sc">|</span>   <span class="er">|</span>   │   data_concurrent_unvac.csv</span>
+<span id="cb3-17"><a href="#cb3-17" tabindex="-1"></a>    <span class="sc">|</span>   <span class="er">|</span>   │   notes.txt</span>
+<span id="cb3-18"><a href="#cb3-18" tabindex="-1"></a>    <span class="sc">|</span>   <span class="er">|</span>   </span>
+<span id="cb3-19"><a href="#cb3-19" tabindex="-1"></a>    <span class="er">|</span>   └───RCA_COVID_TEST_SITE_20250201<span class="dv">-20250228</span>   <span class="ot">&lt;-</span><span class="sc">------</span> zip and send to GVDN</span>
+<span id="cb3-20"><a href="#cb3-20" tabindex="-1"></a>    <span class="sc">|</span>   <span class="er">|</span>   │   data_self_pre.csv</span>
+<span id="cb3-21"><a href="#cb3-21" tabindex="-1"></a>    <span class="sc">|</span>   <span class="er">|</span>   │...</span>
+<span id="cb3-22"><a href="#cb3-22" tabindex="-1"></a>    <span class="sc">|</span>   <span class="er">|</span>   </span>
+<span id="cb3-23"><a href="#cb3-23" tabindex="-1"></a>    <span class="er">|</span>   <span class="er">|</span>...</span>
+<span id="cb3-24"><a href="#cb3-24" tabindex="-1"></a>    <span class="sc">|</span></span>
+<span id="cb3-25"><a href="#cb3-25" tabindex="-1"></a>    (<span class="cf">in</span> the future...)</span>
+<span id="cb3-26"><a href="#cb3-26" tabindex="-1"></a>    <span class="sc">|</span></span>
+<span id="cb3-27"><a href="#cb3-27" tabindex="-1"></a>    └───<span class="fu">RSV</span> (or other future module)</span>
+<span id="cb3-28"><a href="#cb3-28" tabindex="-1"></a>        │   options.txt</span>
+<span id="cb3-29"><a href="#cb3-29" tabindex="-1"></a>        <span class="sc">|</span>   </span>
+<span id="cb3-30"><a href="#cb3-30" tabindex="-1"></a>        └───RCA_RSV_TEST_SITE_20260101<span class="dv">-20260131</span></span>
+<span id="cb3-31"><a href="#cb3-31" tabindex="-1"></a>        <span class="sc">|</span>   │   data_self_pre.csv</span>
+<span id="cb3-32"><a href="#cb3-32" tabindex="-1"></a>        <span class="sc">|</span>   <span class="er">|</span>...</span>
+<span id="cb3-33"><a href="#cb3-33" tabindex="-1"></a>        <span class="sc">|</span>...</span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="advanced-usage-vignettes">Advanced usage (vignettes)<a class="anchor" aria-label="anchor" href="#advanced-usage-vignettes"></a>
