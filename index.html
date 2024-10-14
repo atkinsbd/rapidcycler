@@ -22,11 +22,11 @@
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
     
 
-    <nav class="navbar fixed-top navbar-light navbar-expand-lg bg-light" data-bs-theme="light"><div class="container">
+    <nav class="navbar fixed-top navbar-dark navbar-expand-lg bg-primary" data-bs-theme="dark"><div class="container">
     
     <a class="navbar-brand me-2" href="index.html">rapidcycler</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.9</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -66,6 +66,7 @@
 <!-- badges: start -->
 <!-- badges: end -->
 <p><strong>Read this page and more on the website: <a href="https://atkinsbd.github.io/rapidcycler/" class="external-link uri">https://atkinsbd.github.io/rapidcycler/</a></strong></p>
+<p><strong>The protocol, data dictionary, table templates, and other information that suppport the use of this package can be found on the GVDN extranet: <a href="https://uoa.sharepoint.com/:f:/r/sites/globalvaccinedatanetwork/Shared%20Documents/GCoVS%20Project/2.%20Rapid%20Cycle%20Analyses/RCA%20II%20(2024)?csf=1&amp;web=1&amp;e=eV1u5Y" class="external-link">RCA II (2024)</a></strong></p>
 <p>The goal of <em>rapidcycler</em> is to bring together a number of methodologies and functions that are used to perform Rapid Cycle Analysis (RCA).</p>
 <p>The current version of the package includes functionality to validate and aggregate line list data into a de-identified format for sharing with GVDN. There is also additional functionality to produce synthetic line list data, though this has not been thoroughly tested and as such should only be used for illustrative/testing purposes.</p>
 <p>Future versions will include functions to perform sequential analysis using maximised sequential probability ratio tests (MaxSPRT), visualise results, and produce reports. A Shiny app is also planned to aid in the regular communication of results. Sites are not required to use these functions, as the analysis and dissemination of results will be performed by GVDN, however they are provided for transparency and so that sites may</p>
@@ -87,7 +88,7 @@
 </h3>
 <p>If you are able to connect to GitHub from within your working environment, this method offers a more streamlined way to install and update the package. You will need to have access to the GitHub repository to use this method.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"rapidcycler"</span>, build_vignettes <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"Global-Vaccine-Data-Network/rapidcycler"</span>, build_vignettes <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="dependencies">Dependencies<a class="anchor" aria-label="anchor" href="#dependencies"></a>
@@ -98,7 +99,6 @@
 <li>data.table</li>
 <li>dplyr</li>
 <li>fst</li>
-<li>here</li>
 <li>magrittr</li>
 <li>rlang</li>
 <li>stringr</li>
@@ -124,12 +124,12 @@
 <p>To participate in RCA, <strong>sites are only required to interact with the aggregation part of the package</strong>. The other functionalities will be used by GVDN to perform the analyses and report results, however will be provided to sites to make use of if they wish to (expected in future version).</p>
 <p>The primary function for aggregation is <code><a href="reference/aggregate_data.html">aggregate_data()</a></code>. You can view the full documentation using <code><a href="reference/aggregate_data.html">?aggregate_data</a></code> or <code><a href="reference/aggregate_data.html">help("aggregate_data")</a></code>. A few key things to note:</p>
 <ul>
-<li><p>Requires input data in the format described in the data dictionary and output templates, summarised in the next section.</p></li>
+<li><p>Requires input data in the format described in the data dictionary and output templates, also summarised in a later section.</p></li>
 <li><p>If the <code>vaccination_data</code> input is set to <code>NULL</code>, the function will perform historical data aggregation.</p></li>
 <li><p>The input datasets are saved and removed from the global environment during aggregation, but restored afterwards by default (see <code>restore_input_data</code> parameter). They can also be restored manually using the <code><a href="reference/recombine_input_data.html">recombine_input_data()</a></code> function. Once aggregation is complete, the saved versions of the input datasets are deleted. If you would like to store the input datasets that were used, please do so manually whilst they are still in your global environment.</p></li>
 <li><p>Validation of the input datasets is run automatically before aggregation is started. If any issues are found, aggregation will be aborted and the issues printed in the console. These issues will need to be fixed before aggregation can be completed. Validation can also be run separately - see Advanced usage section at the end of this document.</p></li>
-<li><p>There is no output from the function, however it will create a new folder with the name format “RCA_[STUDY_CODENMAE]<em>[SITE_CODE]</em>[CYCLE_START]-[CYCLE_END]”, at the location specified by <code>working_directory</code>, and save the aggregated tables within it. Once complete, this folder should be zipped and sent to GVDN.</p></li>
-<li><p>Requires an ‘options.txt’ file to run - this will be sent to you by GVDN and should be saved in an appropriate location (specified by <code>options_file_location</code>). This same file should be used for the duration of the study (one options file per study module).</p></li>
+<li><p>There is no output from the function, however it will create a new folder with the name format “RCA_[STUDY_CODENAME]_[SITE_CODE]_[CYCLE_START]-[CYCLE_END]”, at the location specified by <code>working_directory</code>, and save the aggregated tables within it. Once complete, this folder should be zipped and sent to GVDN.</p></li>
+<li><p>Requires an ‘options.txt’ file to run - this can be found on the extranet (<a href="https://uoa.sharepoint.com/:f:/r/sites/globalvaccinedatanetwork/Shared%20Documents/GCoVS%20Project/2.%20Rapid%20Cycle%20Analyses/RCA%20II%20(2024)?csf=1&amp;web=1&amp;e=eV1u5Y" class="external-link">RCA II (2024)</a>) and should be downloaded and saved in an appropriate location (specified by <code>options_file_location</code>). This same file should be used for the duration of the study (one options file per study module).</p></li>
 </ul>
 <div class="section level3">
 <h3 id="example-default-usage">Example: Default usage<a class="anchor" aria-label="anchor" href="#example-default-usage"></a>
@@ -149,7 +149,7 @@
 </h3>
 <p>There are two important file locations within the function:</p>
 <ul>
-<li><p><code>options_file_location</code>: this is where the ‘options.txt’ file is stored</p></li>
+<li><p><code>options_file_location</code>: this is where the ‘options.txt’ file is stored (in local memory)</p></li>
 <li><p><code>working_directory</code>: this is where a new folder will be created, within which aggregated tables are saved</p></li>
 </ul>
 <p>Both these inputs will default to the current working directory, given by <code><a href="https://rdrr.io/r/base/getwd.html" class="external-link">getwd()</a></code>, if not specified. To use a different location, you can either change your current working directory using <code><a href="https://rdrr.io/r/base/getwd.html" class="external-link">setwd()</a></code> (both locations will be the same), or use these inputs to specify different locations (they do not need to match, but in our recommended folder structure they do).</p>
@@ -241,7 +241,7 @@
 <div class="section level3">
 <h3 id="input-datasets">Input datasets<a class="anchor" aria-label="anchor" href="#input-datasets"></a>
 </h3>
-<p>A full data dictionary can be found here: <a href="https://uoa.sharepoint.com/:f:/r/sites/globalvaccinedatanetwork/Shared%20Documents/GCoVS%20Project/2.%20Rapid%20Cycle%20Analyses/RCA%20II%20(2024)?csf=1&amp;web=1&amp;e=6zgf7A" class="external-link uri">https://uoa.sharepoint.com/:f:/r/sites/globalvaccinedatanetwork/Shared%20Documents/GCoVS%20Project/2.%20Rapid%20Cycle%20Analyses/RCA%20II%20(2024)?csf=1&amp;web=1&amp;e=6zgf7A</a></p>
+<p>A full data dictionary can be found here: <a href="https://uoa.sharepoint.com/:f:/r/sites/globalvaccinedatanetwork/Shared%20Documents/GCoVS%20Project/2.%20Rapid%20Cycle%20Analyses/RCA%20II%20(2024)?csf=1&amp;web=1&amp;e=eV1u5Y" class="external-link">RCA II (2024)</a></p>
 <p>The input datasets should have the following structures:</p>
 <p><strong><em>patient_data</em></strong></p>
 <table class="table">
@@ -357,13 +357,47 @@
 <div class="section level3">
 <h3 id="recommended-folder-structure">Recommended folder structure<a class="anchor" aria-label="anchor" href="#recommended-folder-structure"></a>
 </h3>
+<p>There is no restriction on the folder structure you use within your local environment. However, in case it is useful, we provide the the outline of a structure that we recommend below. Folder names can be changed as you please, but note that the name of the folder created by the <code><a href="reference/aggregate_data.html">aggregate_data()</a></code> function should not be changed.</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" tabindex="-1"></a>GVDN</span>
+<span id="cb9-2"><a href="#cb9-2" tabindex="-1"></a>│</span>
+<span id="cb9-3"><a href="#cb9-3" tabindex="-1"></a>└───RCA2</span>
+<span id="cb9-4"><a href="#cb9-4" tabindex="-1"></a>    │</span>
+<span id="cb9-5"><a href="#cb9-5" tabindex="-1"></a>    └───COVID   <span class="ot">&lt;-</span><span class="sc">------</span> working directory</span>
+<span id="cb9-6"><a href="#cb9-6" tabindex="-1"></a>    <span class="sc">|</span>   │   options.txt</span>
+<span id="cb9-7"><a href="#cb9-7" tabindex="-1"></a>    <span class="sc">|</span>   <span class="er">|</span>   </span>
+<span id="cb9-8"><a href="#cb9-8" tabindex="-1"></a>    <span class="er">|</span>   └───RCA_COVID_TEST_SITE_20250101<span class="dv">-20250131</span>   <span class="ot">&lt;-</span><span class="sc">------</span> zip and send to GVDN</span>
+<span id="cb9-9"><a href="#cb9-9" tabindex="-1"></a>    <span class="sc">|</span>   <span class="er">|</span>   │   data_self_pre.csv</span>
+<span id="cb9-10"><a href="#cb9-10" tabindex="-1"></a>    <span class="sc">|</span>   <span class="er">|</span>   │   data_self_post.csv</span>
+<span id="cb9-11"><a href="#cb9-11" tabindex="-1"></a>    <span class="sc">|</span>   <span class="er">|</span>   │   data_exposed_person_days.csv</span>
+<span id="cb9-12"><a href="#cb9-12" tabindex="-1"></a>    <span class="sc">|</span>   <span class="er">|</span>   │   data_exposed_cases.csv</span>
+<span id="cb9-13"><a href="#cb9-13" tabindex="-1"></a>    <span class="sc">|</span>   <span class="er">|</span>   │   data_descriptive_vaccination.csv</span>
+<span id="cb9-14"><a href="#cb9-14" tabindex="-1"></a>    <span class="sc">|</span>   <span class="er">|</span>   │   data_descriptive_outcomes.csv</span>
+<span id="cb9-15"><a href="#cb9-15" tabindex="-1"></a>    <span class="sc">|</span>   <span class="er">|</span>   │   data_concurrent_vac.csv</span>
+<span id="cb9-16"><a href="#cb9-16" tabindex="-1"></a>    <span class="sc">|</span>   <span class="er">|</span>   │   data_concurrent_unvac.csv</span>
+<span id="cb9-17"><a href="#cb9-17" tabindex="-1"></a>    <span class="sc">|</span>   <span class="er">|</span>   │   notes.txt</span>
+<span id="cb9-18"><a href="#cb9-18" tabindex="-1"></a>    <span class="sc">|</span>   <span class="er">|</span>   </span>
+<span id="cb9-19"><a href="#cb9-19" tabindex="-1"></a>    <span class="er">|</span>   └───RCA_COVID_TEST_SITE_20250201<span class="dv">-20250228</span>   <span class="ot">&lt;-</span><span class="sc">------</span> zip and send to GVDN</span>
+<span id="cb9-20"><a href="#cb9-20" tabindex="-1"></a>    <span class="sc">|</span>   <span class="er">|</span>   │   data_self_pre.csv</span>
+<span id="cb9-21"><a href="#cb9-21" tabindex="-1"></a>    <span class="sc">|</span>   <span class="er">|</span>   │...</span>
+<span id="cb9-22"><a href="#cb9-22" tabindex="-1"></a>    <span class="sc">|</span>   <span class="er">|</span>   </span>
+<span id="cb9-23"><a href="#cb9-23" tabindex="-1"></a>    <span class="er">|</span>   <span class="er">|</span>...</span>
+<span id="cb9-24"><a href="#cb9-24" tabindex="-1"></a>    <span class="sc">|</span></span>
+<span id="cb9-25"><a href="#cb9-25" tabindex="-1"></a>    (<span class="cf">in</span> the future...)</span>
+<span id="cb9-26"><a href="#cb9-26" tabindex="-1"></a>    <span class="sc">|</span></span>
+<span id="cb9-27"><a href="#cb9-27" tabindex="-1"></a>    └───<span class="fu">RSV</span> (or other future module)</span>
+<span id="cb9-28"><a href="#cb9-28" tabindex="-1"></a>        │   options.txt</span>
+<span id="cb9-29"><a href="#cb9-29" tabindex="-1"></a>        <span class="sc">|</span>   </span>
+<span id="cb9-30"><a href="#cb9-30" tabindex="-1"></a>        └───RCA_RSV_TEST_SITE_20260101<span class="dv">-20260131</span></span>
+<span id="cb9-31"><a href="#cb9-31" tabindex="-1"></a>        <span class="sc">|</span>   │   data_self_pre.csv</span>
+<span id="cb9-32"><a href="#cb9-32" tabindex="-1"></a>        <span class="sc">|</span>   <span class="er">|</span>...</span>
+<span id="cb9-33"><a href="#cb9-33" tabindex="-1"></a>        <span class="sc">|</span>...</span></code></pre></div>
 </div>
 </div>
 <div class="section level2">
 <h2 id="advanced-usage-vignettes">Advanced usage (vignettes)<a class="anchor" aria-label="anchor" href="#advanced-usage-vignettes"></a>
 </h2>
 <p>For explanations and examples relating to the other functionalities within the package, please see the included vignettes.</p>
-<p>You can browse all vignettes using <code>browseVignettes("rapidcycler")</code>.</p>
+<p>You can browse all vignettes using <code>browseVignettes("rapidcycler")</code> in RStudio, or under the ‘Articles’ tab on the website.</p>
 </div>
 </div>
   </main><aside class="col-md-3"><div class="license">
