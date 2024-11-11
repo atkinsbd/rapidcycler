@@ -22,7 +22,7 @@ If you would like to run validation separately, use the validate_input_data() fu
     
     <a class="navbar-brand me-2" href="../index.html">rapidcycler</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.9</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -75,6 +75,7 @@ If you would like to run validation separately, use the <code><a href="validate_
 <span>  <span class="va">cycle_end_date</span>,</span>
 <span>  <span class="va">site_code</span>,</span>
 <span>  <span class="va">participation_level</span>,</span>
+<span>  design_selection <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  options_file_location <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/getwd.html" class="external-link">getwd</a></span><span class="op">(</span><span class="op">)</span>,</span>
 <span>  options <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  suppression_limit <span class="op">=</span> <span class="cn">NULL</span>,</span>
@@ -83,7 +84,8 @@ If you would like to run validation separately, use the <code><a href="validate_
 <span>  restore_input_data <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  working_directory <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/getwd.html" class="external-link">getwd</a></span><span class="op">(</span><span class="op">)</span>,</span>
 <span>  input_data_in_chunks <span class="op">=</span> <span class="cn">FALSE</span>,</span>
-<span>  final_chunk <span class="op">=</span> <span class="cn">FALSE</span></span>
+<span>  final_chunk <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  skip_user_prompts <span class="op">=</span> <span class="cn">FALSE</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -117,6 +119,11 @@ If you would like to run validation separately, use the <code><a href="validate_
 <dd><p>Site's level of participation, as a number from 1-3: 1 = minimal, 2 = partial, 3 = full</p></dd>
 
 
+<dt>design_selection</dt>
+<dd><p>Character vector of specific study designs to run, only needed if you do not wish to run all study designs within your level of participation.
+Default is NULL, which will run all study designs according to your level of participation</p></dd>
+
+
 <dt>options_file_location</dt>
 <dd><p>Location where options.txt file is stored. Supply either <code>options_file_location</code> or <code>options</code>, not both. Defaults to <code><a href="https://rdrr.io/r/base/getwd.html" class="external-link">getwd()</a></code></p></dd>
 
@@ -126,7 +133,7 @@ If you would like to run validation separately, use the <code><a href="validate_
 
 
 <dt>suppression_limit</dt>
-<dd><p>If required, low numbers can be suppressed. Numbers less than the limit will be suppressed</p></dd>
+<dd><p>If required, low numbers can be suppressed. Numbers less than the limit will be suppressed, except 0</p></dd>
 
 
 <dt>split_size</dt>
@@ -156,6 +163,10 @@ WARNING: the data folder is removed once aggregation is complete (not if stopped
 <dt>final_chunk</dt>
 <dd><p>If you have pre-split your input data, use this to indicate when you are running the last chunk of your input data. This will trigger the function
 to combine all the temporary results at the end</p></dd>
+
+
+<dt>skip_user_prompts</dt>
+<dd><p>Boolean allowing user prompts to be skipped, mainly for the purpose of testing for which prompts are not possible. Recommended to leave as FALSE.</p></dd>
 
 </dl></div>
 

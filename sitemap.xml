@@ -103,7 +103,13 @@
     <loc>https://global-vaccine-data-network.github.io/rapidcycler/reference/generate_vaccination_data.html</loc>
   </url>
   <url>
+    <loc>https://global-vaccine-data-network.github.io/rapidcycler/reference/get_descriptives.html</loc>
+  </url>
+  <url>
     <loc>https://global-vaccine-data-network.github.io/rapidcycler/reference/index.html</loc>
+  </url>
+  <url>
+    <loc>https://global-vaccine-data-network.github.io/rapidcycler/reference/load_combine_summarise.html</loc>
   </url>
   <url>
     <loc>https://global-vaccine-data-network.github.io/rapidcycler/reference/map_brands_to_platform.html</loc>

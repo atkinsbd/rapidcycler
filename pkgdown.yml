@@ -4,7 +4,7 @@ pkgdown_sha: ~
 articles:
   aggregate: aggregate.html
   validate: validate.html
-last_built: 2024-10-14T05:52Z
+last_built: 2024-11-11T04:08Z
 urls:
   reference: https://global-vaccine-data-network.github.io/rapidcycler/reference
   article: https://global-vaccine-data-network.github.io/rapidcycler/articles

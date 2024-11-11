@@ -16,7 +16,7 @@ If validating historical input data, set vaccination_data = NULL."><!-- mathjax 
     
     <a class="navbar-brand me-2" href="../index.html">rapidcycler</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.9</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -66,7 +66,8 @@ This function is run automatically from within the <code><a href="aggregate_data
 <span>  <span class="va">cycle_end_date</span>,</span>
 <span>  options_file_location <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/getwd.html" class="external-link">getwd</a></span><span class="op">(</span><span class="op">)</span>,</span>
 <span>  options <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  split_size <span class="op">=</span> <span class="fl">5e+05</span></span>
+<span>  split_size <span class="op">=</span> <span class="fl">5e+05</span>,</span>
+<span>  skip_user_prompts <span class="op">=</span> <span class="cn">FALSE</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -102,6 +103,10 @@ This function is run automatically from within the <code><a href="aggregate_data
 
 <dt>split_size</dt>
 <dd><p>Input data will be automatically split into pieces of this size (default 500,000). If memory is an issue, lower the split_size.</p></dd>
+
+
+<dt>skip_user_prompts</dt>
+<dd><p>Boolean allowing user prompts to be skipped, mainly for the purpose of testing for which prompts are not possible. Recommended to leave as FALSE.</p></dd>
 
 </dl></div>
     <div class="section level2">

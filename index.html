@@ -26,7 +26,7 @@
     
     <a class="navbar-brand me-2" href="index.html">rapidcycler</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.9</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -62,6 +62,7 @@
 </h1></div>
 <!-- badges: start -->
 <!-- badges: end -->
+<p><strong>Read this page and more on the website: <a href="https://atkinsbd.github.io/rapidcycler/" class="external-link uri">https://atkinsbd.github.io/rapidcycler/</a></strong></p>
 <p><strong>The protocol, data dictionary, table templates, and other information that suppport the use of this package can be found on the GVDN extranet: <a href="https://uoa.sharepoint.com/:f:/r/sites/globalvaccinedatanetwork/Shared%20Documents/GCoVS%20Project/2.%20Rapid%20Cycle%20Analyses/RCA%20II%20(2024)?csf=1&amp;web=1&amp;e=eV1u5Y" class="external-link">RCA II (2024)</a></strong></p>
 <p>The goal of <em>rapidcycler</em> is to bring together a number of methodologies and functions that are used to perform Rapid Cycle Analysis (RCA).</p>
 <p>The current version of the package includes functionality to validate and aggregate line list data into a de-identified format for sharing with GVDN. There is also additional functionality to produce synthetic line list data, though this has not been thoroughly tested and as such should only be used for illustrative/testing purposes.</p>
@@ -78,11 +79,12 @@
 <code class="sourceCode R"><span><span class="co"># EDIT THE FILE PATH AND NAME AS NECESSARY</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"~/Documents/rapidcycler_1.0.0.0.tar.gz"</span>, repos <span class="op">=</span> <span class="cn">NULL</span>, type<span class="op">=</span><span class="st">"source"</span><span class="op">)</span></span></code></pre></div>
 <p>To update the package, the process of downloading, importing, and installing the tarball must be repeated.</p>
+<p><strong>NOTE:</strong> If you are working on a Windows machine, you will need to have Rtools installed in order to build the package from the source file. This can be downloaded and installed from here: <a href="https://cran.r-project.org/bin/windows/Rtools/" class="external-link uri">https://cran.r-project.org/bin/windows/Rtools/</a></p>
 </div>
 <div class="section level3">
 <h3 id="id_2-directly-from-github">2. Directly from GitHub<a class="anchor" aria-label="anchor" href="#id_2-directly-from-github"></a>
 </h3>
-<p>If you are able to connect to GitHub from within your working environment, this method offers a more streamlined way to install and update the package. You will need to have access to the GitHub repository to use this method.</p>
+<p>If you are able to connect to GitHub from within your working environment, this method offers a more streamlined way to install and update the package. You will need to have access to the GitHub repository to use this method, and have set up a personal access token or SSH key (see <a href="https://happygitwithr.com/https-pat" class="external-link uri">https://happygitwithr.com/https-pat</a> for more info).</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"Global-Vaccine-Data-Network/rapidcycler"</span>, build_vignettes <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
 </div>
@@ -136,6 +138,7 @@
 <p>The starting point for interacting with the package is to obtain 3 data.table objects, containing information on patients, vaccinations, and AESI outcomes.</p>
 <p>A full data dictionary can be found here: <a href="https://uoa.sharepoint.com/:f:/r/sites/globalvaccinedatanetwork/Shared%20Documents/GCoVS%20Project/2.%20Rapid%20Cycle%20Analyses/RCA%20II%20(2024)?csf=1&amp;web=1&amp;e=eV1u5Y" class="external-link">RCA II (2024)</a>, and a summary of the input dataset structures is given below:</p>
 <p><strong><em>patient_data</em></strong></p>
+<p>Contains patient details. Patients must be in the cohort for at least part of the current cycle - that is, birth or entry to the cohort before the cycle end, and death or exit from the cohort after the cycle start.</p>
 <table class="table">
 <colgroup>
 <col width="7%">
@@ -181,6 +184,7 @@
 </tbody>
 </table>
 <p><strong><em>vaccination_data</em></strong></p>
+<p>Contains vaccination details for individuals in <em>patient_data</em>. Vaccinations must have occurred between the start of the <strong>study period (not cycle)</strong> and end of the current cycle.</p>
 <table class="table">
 <colgroup>
 <col width="13%">
@@ -211,6 +215,7 @@
 </tbody>
 </table>
 <p><strong><em>outcome_data</em></strong></p>
+<p>Contains AESI outcome details for individuals in <em>patient_data</em>. Outcomes must have occurred between the start of the <strong>lookback period (not cycle)</strong> and end of the current cycle. Unless otherwise specified, the lookback period covers the 2 years prior to the study start date.</p>
 <table class="table">
 <colgroup>
 <col width="17%">

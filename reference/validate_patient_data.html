@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">rapidcycler</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.9</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -49,13 +49,21 @@
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">validate_patient_data</span><span class="op">(</span><span class="va">patient_data</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">validate_patient_data</span><span class="op">(</span><span class="va">patient_data</span>, <span class="va">cycle_start_date</span>, <span class="va">cycle_end_date</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
     <dl><dt>patient_data</dt>
 <dd><p>Patient data input data.table</p></dd>
+
+
+<dt>cycle_start_date</dt>
+<dd><p>Start date of cycle, as a date object, an 8 digit number of the form yyyymmdd, or a string of the form yyyy-mm-dd</p></dd>
+
+
+<dt>cycle_end_date</dt>
+<dd><p>End date of cycle, as a date object, an 8 digit number of the form yyyymmdd, or a string of the form yyyy-mm-dd</p></dd>
 
 </dl></div>
     <div class="section level2">
